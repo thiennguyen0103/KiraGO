@@ -1,0 +1,37 @@
+---
+description: Existing Nx checks, formatting, Git hooks, and environment-file rules
+alwaysApply: true
+---
+
+# Quality
+
+Run commands from the repo root. There is no CI workflow and no frontend test target. Do not report a check you did not run.
+
+- `admin`: `pnpm exec nx lint admin`, `pnpm exec nx format-check admin`, `pnpm exec nx typecheck admin`
+- `customer`: `pnpm exec nx lint customer`, `pnpm exec nx format-check customer` (no `typecheck` target)
+- `api`: `pnpm exec nx format-check api`, `pnpm exec nx vet api`, `pnpm exec nx test api`
+
+`pnpm exec nx format <project>` writes fixes. Format-check only reports drift.
+
+## Tools
+
+- Oxlint lints `admin` and `customer` (`--deny-warnings` in each `project.json`). It does not lint Go.
+- Prettier (single quotes, semicolons, trailing commas, print width 100) formats the frontends. `.prettierignore` excludes `apps/api`.
+- Go format and checks are `gofmt`, `go vet`, and `go test` through the `api` targets. `format-check` runs `gofmt -l cmd internal` and exits 1 when files differ. `.editorconfig` sets spaces for every file; `gofmt` still owns `*.go` and uses tabs.
+- `apps/api/internal` is empty and untracked. `format-check` fails if that directory is missing.
+
+## Hooks
+
+`.husky/pre-commit` runs admin/customer lint, format-check for all three projects, and `pnpm exec nx vet api`. Each step ends with `|| exit 1`. Keep that failure behavior. The hook checks whole projects, not the Git index, and does not run tests.
+
+`.husky/commit-msg` runs Commitlint with `@commitlint/config-conventional`.
+
+If staged-file tooling is added, leave unstaged changes untouched and still exit nonzero when a check fails.
+
+## Environment
+
+`.gitignore` ignores `.env` and `.env.*`, then un-ignores `.env.example`. Commit only example files, with local placeholders and no live secrets.
+
+- Admin: `VITE_API_BASE_URL`
+- Customer: `API_BASE_URL`, `NEXT_PUBLIC_API_BASE_URL`
+- API: `PORT`, `DATABASE_URL`, `CORS_ALLOWED_ORIGINS`

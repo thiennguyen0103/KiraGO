@@ -1,0 +1,37 @@
+---
+description: React, Next.js, and TypeScript conventions for the admin and customer apps
+globs: apps/admin/src/**/*.ts,apps/admin/src/**/*.tsx,apps/admin/src/**/*.css,apps/admin/vite.config.mts,apps/customer/src/**/*.ts,apps/customer/src/**/*.tsx,apps/customer/src/**/*.css,apps/customer/next.config.js
+alwaysApply: false
+---
+
+# Frontend
+
+`admin` is Vite + React 19 + React Router 6. `BrowserRouter` is in `apps/admin/src/main.tsx`; routes live in `apps/admin/src/app`. Dev server port is 4200.
+
+`customer` is Next.js 16 App Router under `apps/customer/src/app` (`layout.tsx`, `page.tsx`, route handlers in `app/api`). Components are Server Components unless they need `'use client'`. Do not add React Router to `customer` or the Next App Router to `admin`.
+
+Both app tsconfigs set `strict: true` (the base config does not). Keep new app code strict.
+
+## UI
+
+Tailwind CSS and shadcn/ui are not installed. Nx generators in `nx.json` still use `style: css`. Styles today are `apps/admin/src/styles.css`, CSS modules, and `apps/customer/src/app/global.css` (plain CSS, including a few utility class names). Do not add a second component kit. After Tailwind and shadcn are added, reuse those components and tokens.
+
+No shared API client exists. Do not invent a parallel client per screen.
+
+- Admin browser calls: `VITE_API_BASE_URL` (`apps/admin/.env.example`).
+- Customer server calls: `API_BASE_URL`. Browser calls: `NEXT_PUBLIC_API_BASE_URL`.
+
+Never put secrets, `API_BASE_URL`, or other server-only modules in a Client Component or in `NEXT_PUBLIC_*` / `VITE_*`. Next route handlers are not the Go API.
+
+## States
+
+Screens that load or submit data need accessible loading, empty, error, validation, and success states. Keep Oxlint `jsx-a11y` rules enabled.
+
+```tsx
+export default async function TripList({ trips, error }: { trips: Trip[] | null; error?: string }) {
+  if (error) return <p role="alert">{error}</p>;
+  if (!trips) return <p role="status">Loading trips</p>;
+  if (trips.length === 0) return <p>No trips yet.</p>;
+  return <ul>{trips.map((trip) => <li key={trip.id}>{trip.name}</li>)}</ul>;
+}
+```

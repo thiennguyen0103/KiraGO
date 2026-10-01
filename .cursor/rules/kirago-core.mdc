@@ -1,0 +1,25 @@
+---
+description: KiraGo monorepo boundaries, source of truth, and implementation workflow
+alwaysApply: true
+---
+
+# KiraGo core
+
+Nx workspace `@kira-go/source` (Nx 23.2.1). Projects are `admin`, `customer`, and `api`. There is no `libs/` tree and `tsconfig.base.json` `paths` is empty. Dependencies live in the root `package.json`.
+
+## Boundaries
+
+- UI stays in `apps/admin` and `apps/customer`. Business rules, authorization, and persistence stay in `apps/api`.
+- Do not import one app from another. Add a shared library only when a task needs reuse; do not copy domain rules into the browser.
+- Change only the files the task needs. Do not add dependencies or refactor unrelated code.
+
+## Source of truth
+
+- Follow ticket acceptance criteria and approved project documents. Do not invent booking, payment, cancellation, refund, or availability rules.
+- Ask when a required rule is missing or documents conflict. For a minor choice, copy the nearest existing pattern.
+- Write identifiers and project documentation in English. Product name in code is mixed today (`KiraGo`, `kirago`, `@kira-go`); match the file you are editing.
+
+## Workflow
+
+- Do not commit, push, deploy, or update external tickets unless the user asks.
+- Before finishing, run the checks listed in the quality rule for each project you changed. Report the command, the result, and any check you skipped.

@@ -1,0 +1,32 @@
+---
+description: Go API layering, validation, errors, and contract conventions
+globs: apps/api/**/*.go,apps/api/go.mod
+alwaysApply: false
+---
+
+# Go API
+
+Module `kirago/api`. Language version is `go 1.25.0` in `apps/api/go.mod` (the local toolchain may be newer). Do not bump it unless the task says so.
+
+`apps/api/cmd/server` uses the standard library `net/http` `ServeMux`. No Gin, Chi, Echo, database driver, or migration tool is installed. `apps/api/internal` is an empty directory. Do not introduce a framework for a single handler.
+
+## Layers
+
+- Keep `main` as wiring. Put new packages under `internal/`.
+- Validate input and enforce permissions in the API. The admin and customer apps are not a security boundary.
+- Pass `r.Context()` through I/O. Wrap errors with the operation that failed; do not ignore them.
+- Use a transaction only when one use case writes more than one statement.
+
+## Contracts
+
+- `GET /health` returns JSON `status` and `service`. Keep that shape.
+- `apps/api/.env.example` lists `PORT`, `DATABASE_URL` (Postgres), and `CORS_ALLOWED_ORIGINS`. `main` still listens on `:8080` and does not read them. When you wire config, read the environment.
+- No migration files exist. Add schema changes with the migration tool the repo adopts; do not invent a second one.
+- Money is an amount plus an ISO currency, never a bare float. Store instants in UTC and name any business timezone on the field. Do not invent booking or payment rules.
+
+```go
+type Money struct {
+    AmountMinor int64
+    Currency    string // ISO 4217
+}
+```
