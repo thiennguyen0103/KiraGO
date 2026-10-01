@@ -1,0 +1,12 @@
+
+node_modules/
+dist/
+.next/
+coverage/
+.nx/
+pnpm-lock.yaml
+apps/api/
+.env
+.env.*
+**/.env
+**/.env.*

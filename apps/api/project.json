@@ -1,0 +1,54 @@
+{
+  "name": "api",
+  "root": "apps/api",
+  "sourceRoot": "apps/api",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/api",
+        "command": "go run ./cmd/server"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/api",
+        "command": "mkdir -p dist && go build -o dist/server ./cmd/server"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "apps/api",
+        "command": "go fmt ./..."
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "apps/api",
+        "command": "bash scripts/check-format.sh"
+      }
+    },
+    "vet": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "apps/api",
+        "command": "go vet ./..."
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "apps/api",
+        "command": "go test -count=1 ./..."
+      }
+    }
+  }
+}

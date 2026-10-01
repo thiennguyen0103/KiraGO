@@ -1,0 +1,42 @@
+{
+  "name": "@kira-go/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "private": true,
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@nx/js": "23.2.1",
+    "@nx/next": "23.2.1",
+    "@nx/oxlint": "23.2.1",
+    "@nx/react": "23.2.1",
+    "@nx/vite": "23.2.1",
+    "@nx/web": "23.2.1",
+    "@nx/workspace": "23.2.1",
+    "@swc-node/register": "~1.11.1",
+    "@swc/cli": "~0.8.1",
+    "@swc/core": "~1.15.5",
+    "@swc/helpers": "~0.5.18",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "husky": "^9.1.7",
+    "jiti": "2.4.2",
+    "nx": "23.2.1",
+    "oxlint": "^1.75.0",
+    "prettier": "3.9.9",
+    "tslib": "^2.3.0",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "next": "~16.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "6.30.3"
+  }
+}

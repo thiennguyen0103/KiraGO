@@ -1,0 +1,3 @@
+pnpm exec nx run-many -t lint --projects=admin,customer || exit 1
+pnpm exec nx run-many -t format-check --projects=admin,customer,api || exit 1
+pnpm exec nx vet api || exit 1

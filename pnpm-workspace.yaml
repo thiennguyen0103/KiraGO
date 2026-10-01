@@ -1,0 +1,6 @@
+autoInstallPeers: true
+allowBuilds:
+  nx: true
+  sharp: true
+  esbuild: true
+  '@swc/core': true
